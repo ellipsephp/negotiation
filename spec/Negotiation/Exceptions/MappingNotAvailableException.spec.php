@@ -8,18 +8,14 @@ use Ellipse\Negotiation\Exceptions\MappingNotAvailableException;
 
 describe('MappingNotAvailableException', function () {
 
-    beforeEach(function () {
+    it('should implement NegotiationExceptionInterface', function () {
 
-        $this->exception = new MappingNotAvailableException('html', [
+        $test = new MappingNotAvailableException('html', [
             'json' => mock(Mapping::class)->get(),
             'csv' => mock(Mapping::class)->get(),
         ]);
 
-    });
-
-    it('should implement NegotiationExceptionInterface', function () {
-
-        expect($this->exception)->toBeAnInstanceOf(NegotiationExceptionInterface::class);
+        expect($test)->toBeAnInstanceOf(NegotiationExceptionInterface::class);
 
     });
 

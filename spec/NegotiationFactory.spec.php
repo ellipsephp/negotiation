@@ -6,15 +6,16 @@ use Psr\Http\Message\ServerRequestInterface;
 
 use Ellipse\NegotiationFactory;
 use Ellipse\Negotiation;
+use Ellipse\Negotiation\NegotiatorAdapter;
 use Ellipse\Negotiation\AvailableMappings;
 
 describe('NegotiationFactory', function () {
 
     beforeEach(function () {
 
-        $this->available = mock(AvailableMappings::class);;
+        $this->available = mock(AvailableMappings::class)->get();
 
-        $this->factory = new NegotiationFactory($this->available->get());
+        $this->factory = new NegotiationFactory($this->available);
 
     });
 
@@ -26,7 +27,9 @@ describe('NegotiationFactory', function () {
 
             $test = ($this->factory)($request);
 
-            expect($test)->toBeAnInstanceOf(Negotiation::class);
+            $negotiation = new Negotiation($request, new NegotiatorAdapter, $this->available);
+
+            expect($test)->toEqual($negotiation);
 
         });
 

@@ -16,17 +16,15 @@ describe('Outcomes', function () {
 
         $this->factories1 = stub();
         $this->factories2 = stub();
-        $this->factories3 = stub();
 
         $this->factories = [
             'mapping1' => $this->factories1,
             'mapping2' => $this->factories2,
-            'mapping3' => $this->factories3,
         ];
 
         $this->mimetypes = [
-            'text/html' => 'mapping2',
-            'application/json' => 'mapping3',
+            'text/html' => 'mapping1',
+            'application/json' => 'mapping2',
         ];
 
         $this->outcomes = new Outcomes($this->factories, $this->mimetypes);
@@ -47,7 +45,9 @@ describe('Outcomes', function () {
 
                 $test = $this->outcomes->fallback('mapping1');
 
-                expect($test)->toBeAnInstanceOf(OutcomesWithFallback::class);
+                $outcomes = new OutcomesWithFallback('mapping1', $this->factories1, $this->outcomes);
+
+                expect($test)->toEqual($outcomes);
 
             });
 
@@ -75,11 +75,23 @@ describe('Outcomes', function () {
 
     describe('->withFactory()', function () {
 
-        it('should return a new Outcomes', function () {
+        it('should return a new Outcomes with the given factory associated to the given key and mimetypes', function () {
 
-            $test = $this->outcomes->withFactory('mapping4', ['text/csv'], stub());
+            $factory = stub();
 
-            expect($test)->toBeAnInstanceOf(Outcomes::class);
+            $test = $this->outcomes->withFactory('mapping3', ['text/csv'], $factory);
+
+            $outcomes = new Outcomes([
+                'mapping1' => $this->factories1,
+                'mapping2' => $this->factories2,
+                'mapping3' => $factory,
+            ], [
+                'text/html' => 'mapping1',
+                'application/json' => 'mapping2',
+                'text/csv' => 'mapping3',
+            ]);
+
+            expect($test)->toEqual($outcomes);
             expect($test)->not->toBe($this->outcomes);
 
         });
@@ -88,13 +100,9 @@ describe('Outcomes', function () {
 
     describe('->agreement()', function () {
 
-        beforeEach(function () {
+        it('should use the negotiator to get a formatter key and return a new Agreement', function () {
 
             $this->negotiator = mock(NegotiatorAdapter::class);
-
-        });
-
-        it('should use the negotiator to get a formatter key and return a new Agreement', function () {
 
             $this->negotiator->negotiatedMimetype
                 ->with('text/html', ['text/html', 'application/json'])
@@ -102,7 +110,9 @@ describe('Outcomes', function () {
 
             $test = $this->outcomes->agreement($this->negotiator->get(), 'text/html');
 
-            expect($test)->toBeAnInstanceOf(Agreement::class);
+            $agreement = new Agreement('mapping1', $this->factories1);
+
+            expect($test)->toEqual($agreement);
 
         });
 

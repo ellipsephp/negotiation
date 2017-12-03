@@ -28,13 +28,20 @@ describe('AvailableMappings', function () {
 
     describe('->withMapping()', function () {
 
-        it('should return a new AvailableMappings', function () {
+        it('should return a new AvailableMappings with the given mapping associated to the given key', function () {
 
             $mapping = mock(Mapping::class)->get();
 
             $test = $this->available->withMapping('mapping4', $mapping);
 
-            expect($test)->toBeAnInstanceOf(AvailableMappings::class);
+            $available = new AvailableMappings([
+                'mapping1' => $this->mapping1->get(),
+                'mapping2' => $this->mapping2->get(),
+                'mapping3' => $this->mapping3->get(),
+                'mapping4' => $mapping,
+            ]);
+
+            expect($test)->toEqual($available);
             expect($test)->not->toBe($this->available);
 
         });
@@ -43,7 +50,7 @@ describe('AvailableMappings', function () {
 
     describe('->withMappings()', function () {
 
-        it('should return a new AvailableMappings', function () {
+        it('should return a new AvailableMappings with the given associative array of mappings', function () {
 
             $mapping4 = mock(Mapping::class)->get();
             $mapping5 = mock(Mapping::class)->get();
@@ -53,7 +60,15 @@ describe('AvailableMappings', function () {
                 'mapping5' => $mapping5,
             ]);
 
-            expect($test)->toBeAnInstanceOf(AvailableMappings::class);
+            $available = new AvailableMappings([
+                'mapping1' => $this->mapping1->get(),
+                'mapping2' => $this->mapping2->get(),
+                'mapping3' => $this->mapping3->get(),
+                'mapping4' => $mapping4,
+                'mapping5' => $mapping5,
+            ]);
+
+            expect($test)->toEqual($available);
             expect($test)->not->toBe($this->available);
 
         });

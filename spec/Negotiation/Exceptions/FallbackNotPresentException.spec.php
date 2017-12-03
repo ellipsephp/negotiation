@@ -7,18 +7,14 @@ use Ellipse\Negotiation\Exceptions\FallbackNotPresentException;
 
 describe('FallbackNotPresentException', function () {
 
-    beforeEach(function () {
+    it('should implement NegotiationExceptionInterface', function () {
 
-        $this->exception = new FallbackNotPresentException('html', [
+        $test = new FallbackNotPresentException('html', [
             'mapping1' => stub(),
             'mapping2' => stub(),
         ]);
 
-    });
-
-    it('should implement NegotiationExceptionInterface', function () {
-
-        expect($this->exception)->toBeAnInstanceOf(NegotiationExceptionInterface::class);
+        expect($test)->toBeAnInstanceOf(NegotiationExceptionInterface::class);
 
     });
 

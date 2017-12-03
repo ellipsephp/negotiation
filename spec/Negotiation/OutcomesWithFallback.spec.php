@@ -47,7 +47,9 @@ describe('OutcomesWithFallback', function () {
 
                 $test = $this->outcomes->agreement($this->negotiator->get(), 'text/html');
 
-                expect($test)->toBeAnInstanceOf(Agreement::class);
+                $agreement = new Agreement('fallback', $this->factory);
+
+                expect($test)->toEqual($agreement);
 
             });
 

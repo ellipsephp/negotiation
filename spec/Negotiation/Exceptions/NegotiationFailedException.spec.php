@@ -5,17 +5,13 @@ use Ellipse\Negotiation\Exceptions\NegotiationFailedException;
 
 describe('NegotiationFailedException', function () {
 
-    beforeEach(function () {
+    it('should implement NegotiationExceptionInterface', function () {
 
-        $this->exception = new NegotiationFailedException('text/html', [
+        $exception = new NegotiationFailedException('text/html', [
             'application/json',
         ]);
 
-    });
-
-    it('should implement NegotiationExceptionInterface', function () {
-
-        expect($this->exception)->toBeAnInstanceOf(NegotiationExceptionInterface::class);
+        expect($exception)->toBeAnInstanceOf(NegotiationExceptionInterface::class);
 
     });
 
